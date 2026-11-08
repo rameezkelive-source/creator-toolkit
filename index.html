@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CreatorKit — Free Open-Source Toolkit for Content Creators</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== TOP FLOATING NAVBAR ===== -->
+  <header id="navbar">
+    <div class="logo-area navbar-left">
+      <span class="logo-glyph">⚡</span>
+      <span class="logo-text">CreatorKit</span>
+      <span class="badge-pill">Open Source</span>
+    </div>
+    <nav class="tab-dock">
+      <button class="tab-btn active" data-tab="safe-zone">🎯 Safe Zone</button>
+      <button class="tab-btn" data-tab="teleprompter">⏱️ Teleprompter</button>
+      <button class="tab-btn" data-tab="thread-splitter">✂️ Thread Splitter</button>
+      <button class="tab-btn" data-tab="yt-preview">📺 YT Preview</button>
+      <button class="tab-btn" data-tab="sponsor-rate">💰 Sponsor Rate</button>
+      <button class="tab-btn" data-tab="link-bio">🔗 Link-in-Bio</button>
+    </nav>
+    <div class="btn-github-wrap navbar-right">
+      <a href="https://github.com" class="btn-github" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main id="app-main">
+
+    <!-- ===================================================== -->
+    <!-- PANEL 1: Safe Zone Overlay Inspector                  -->
+    <!-- ===================================================== -->
+    <section class="tool-panel active" id="panel-safe-zone">
+      <div class="panel-header">
+        <h2>Safe Zone Overlay Inspector</h2>
+        <p class="panel-desc">Preview how platform UI elements block your content on TikTok, Reels &amp; Shorts.</p>
+      </div>
+      <div class="safe-zone-layout">
+        <!-- LEFT CONTROLS -->
+        <div class="sz-controls glass-card">
+          <div class="control-group">
+            <label>Media</label>
+            <input type="file" id="sz-upload" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden>
+            <button type="button" class="btn-secondary" onclick="document.getElementById('sz-upload').click()">📁 Upload 9:16 Media</button>
+            <button type="button" class="btn-secondary" id="sz-demo-btn">🎨 Load Demo Graphic</button>
+            <button type="button" class="btn-ghost" id="sz-clear-btn">✕ Clear</button>
+          </div>
+          <div class="control-group">
+            <label>Platform Overlay</label>
+            <div class="pill-group" id="sz-platform-group">
+              <button type="button" class="pill-toggle active" data-platform="tiktok">TikTok</button>
+              <button type="button" class="pill-toggle" data-platform="reels">Reels</button>
+              <button type="button" class="pill-toggle" data-platform="shorts">Shorts</button>
+              <button type="button" class="pill-toggle" data-platform="none">None</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="toggle-label">
+              <span>Danger Zone Highlight</span>
+              <span class="switch">
+                <input type="checkbox" id="sz-danger-toggle">
+                <span class="slider-track"></span>
+              </span>
+            </label>
+          </div>
+          <div class="control-group">
+            <label>Overlay Opacity: <span id="sz-opacity-val">70%</span></label>
+            <input type="range" id="sz-opacity" class="range-slider" min="20" max="100" value="70">
+          </div>
+        </div>
+        <!-- RIGHT PREVIEW -->
+        <div class="sz-preview-area">
+          <div class="phone-frame" id="phone-frame">
+            <div class="phone-bezel">
+              <div class="phone-notch"></div>
+              <div class="phone-screen" id="phone-screen">
+                <div class="phone-media-container" id="phone-media">
+                  <div class="phone-placeholder" id="sz-placeholder">
+                    <span>📱</span>
+                    <p>Upload media or load demo</p>
+                  </div>
+                </div>
+                <!-- Platform overlays injected by JS -->
+                <div id="sz-overlay-container"></div>
+                <!-- Danger zones injected by JS -->
+                <div id="sz-danger-zones"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- PANEL 2: Script Teleprompter                          -->
+    <!-- ===================================================== -->
+    <section class="tool-panel" id="panel-teleprompter">
+      <div class="panel-header">
+        <h2>Script Read-Time &amp; Teleprompter</h2>
+        <p class="panel-desc">Measure your script timing and launch an auto-scrolling teleprompter.</p>
+      </div>
+      <div class="teleprompter-layout">
+        <div class="tp-editor glass-card">
+          <div class="tp-metrics-bar">
+            <div class="metric-chip"><span class="metric-label">Words</span><span class="metric-val" id="tp-words">0</span></div>
+            <div class="metric-chip"><span class="metric-label">Chars</span><span class="metric-val" id="tp-chars">0</span></div>
+            <div class="metric-chip"><span class="metric-label">Est. Time</span><span class="metric-val" id="tp-time">0:00</span></div>
+            <div class="metric-chip overtime-chip" id="tp-overtime-chip" style="display:none">
+              <span class="metric-label">⚠️ Over</span><span class="metric-val" id="tp-overtime-val">+0 words</span>
+            </div>
+          </div>
+          <textarea id="tp-script" class="script-textarea" placeholder="Paste your script here...">Hey — welcome back! In this video I want to talk about something that trips up almost every new content creator: pacing. When you film yourself speaking for a 60-second reel, your natural speaking speed might actually fit 2.5 minutes of content. That gap is brutal if you don't plan for it. So here's the framework I use: script first, time second, cut third. First, write everything you want to say without thinking about length. Second, run it through a tool like this to see your real reading time. Third, ruthlessly cut until your words land inside your target window. The goal isn't fewer ideas — it's tighter delivery of your best ones. See you in the next one.</textarea>
+          <div class="tp-controls">
+            <div class="control-row">
+              <label>Speaking Speed</label>
+              <div class="pill-group" id="tp-speed-group">
+                <button type="button" class="pill-toggle" data-wpm="160">⚡ Fast 160</button>
+                <button type="button" class="pill-toggle active" data-wpm="140">🗣️ Natural 140</button>
+                <button type="button" class="pill-toggle" data-wpm="115">📖 Story 115</button>
+                <button type="button" class="pill-toggle custom-wpm-toggle" data-wpm="custom">Custom</button>
+              </div>
+              <input type="number" id="tp-custom-wpm" class="input-inline" placeholder="WPM" min="60" max="300" value="140" style="display:none">
+            </div>
+            <div class="control-row">
+              <label>Target Duration</label>
+              <div class="pill-group" id="tp-duration-group">
+                <button type="button" class="pill-toggle" data-duration="15">15s</button>
+                <button type="button" class="pill-toggle" data-duration="30">30s</button>
+                <button type="button" class="pill-toggle" data-duration="60">60s</button>
+                <button type="button" class="pill-toggle" data-duration="90">90s</button>
+                <button type="button" class="pill-toggle active" data-duration="0">None</button>
+              </div>
+            </div>
+            <button type="button" class="btn-primary" id="tp-launch-btn">🚀 Launch Teleprompter</button>
+          </div>
+        </div>
+      </div>
+      <!-- TELEPROMPTER MODAL -->
+      <div class="modal-overlay" id="tp-modal" style="display:none">
+        <div class="teleprompter-screen">
+          <div class="tp-hud">
+            <button type="button" class="btn-icon" id="tp-play-pause" title="Play / Pause (Space)">▶</button>
+            <div class="hud-group">
+              <label>Speed</label>
+              <input type="range" id="tp-scroll-speed" min="1" max="10" value="3" class="range-slider-sm">
+            </div>
+            <div class="hud-group">
+              <label>Size</label>
+              <button type="button" class="btn-icon-sm" id="tp-font-down">A-</button>
+              <button type="button" class="btn-icon-sm" id="tp-font-up">A+</button>
+            </div>
+            <label class="toggle-label-sm">
+              <input type="checkbox" id="tp-mirror-toggle"> Mirror
+            </label>
+            <button type="button" class="btn-icon" id="tp-close-modal" title="Close (Esc)">✕</button>
+          </div>
+          <div class="tp-scroll-area" id="tp-scroll-area">
+            <div class="tp-guide-line"></div>
+            <div class="tp-scroll-content" id="tp-scroll-content"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- PANEL 3: Thread & Post Splitter                       -->
+    <!-- ===================================================== -->
+    <section class="tool-panel" id="panel-thread-splitter">
+      <div class="panel-header">
+        <h2>Thread &amp; Post Splitter</h2>
+        <p class="panel-desc">Split long-form content into platform-ready posts automatically.</p>
+      </div>
+      <div class="splitter-layout">
+        <div class="splitter-input-col glass-card">
+          <div class="control-group">
+            <label>Platform <span class="char-counter" id="ts-char-counter">0 chars</span></label>
+            <div class="pill-group" id="ts-platform-group">
+              <button type="button" class="pill-toggle active" data-ts-platform="twitter">𝕏 Twitter</button>
+              <button type="button" class="pill-toggle" data-ts-platform="threads">🧵 Threads</button>
+              <button type="button" class="pill-toggle" data-ts-platform="linkedin">💼 LinkedIn</button>
+            </div>
+          </div>
+          <textarea id="ts-input" class="script-textarea" placeholder="Paste your long-form content here...">Most creators quit before they hit 1,000 subscribers. Not because they lack talent, but because they misunderstand the game entirely. Here's what nobody tells you at the start. The algorithm doesn't reward quality alone. It rewards consistency plus quality. A good video published every week will always outperform a great video published once a month. Your first 100 videos are practice, not portfolio. Stop treating early content like it needs to be perfect. It needs to exist. The creators who make it are the ones who publish when they don't feel ready, who keep going after a video flops, who treat each upload as a data point and not a verdict on their worth. Build your feedback loop. Publish, analyze, adjust, repeat. That's the entire strategy for year one. Everything else is noise. The audience finds the creator who shows up — not the one who waits until they're ready, because that day never comes.</textarea>
+          <button type="button" class="btn-primary" id="ts-split-btn">✂️ Split Thread</button>
+        </div>
+        <div class="splitter-output-col" id="ts-output-col">
+          <div class="output-header" id="ts-output-header" style="display:none">
+            <span id="ts-post-count">0 posts</span>
+            <button type="button" class="btn-secondary" id="ts-copy-all-btn">📋 Copy Full Thread</button>
+          </div>
+          <div id="ts-cards-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- PANEL 4: YouTube Feed Preview                         -->
+    <!-- ===================================================== -->
+    <section class="tool-panel" id="panel-yt-preview">
+      <div class="panel-header">
+        <h2>YouTube Feed &amp; Truncation Tester</h2>
+        <p class="panel-desc">See exactly how YouTube truncates your title on mobile and desktop feeds.</p>
+      </div>
+      <div class="yt-layout">
+        <div class="yt-controls glass-card">
+          <div class="control-group">
+            <label>Video Title <span class="char-counter" id="yt-title-counter">0/100</span></label>
+            <input type="text" id="yt-title" class="input-field" placeholder="Enter your video title here..." value="I Tested Every AI Video Tool So You Don't Have To (Honest Rankings)">
+          </div>
+          <div class="control-group">
+            <label>Channel Name</label>
+            <input type="text" id="yt-channel" class="input-field" value="CreatorKit Studio">
+          </div>
+          <div class="form-row">
+            <div class="control-group">
+              <label>Upload Time</label>
+              <input type="text" id="yt-time" class="input-field" value="3 hours ago">
+            </div>
+            <div class="control-group">
+              <label>View Count</label>
+              <input type="text" id="yt-views" class="input-field" value="45K views">
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Duration Badge</label>
+            <input type="text" id="yt-duration" class="input-field" value="12:34">
+          </div>
+          <div class="control-group">
+            <label>Thumbnail</label>
+            <input type="file" id="yt-thumb-upload" accept="image/*" hidden>
+            <div class="btn-row">
+              <button type="button" class="btn-secondary" onclick="document.getElementById('yt-thumb-upload').click()">📁 Upload Thumbnail</button>
+              <button type="button" class="btn-secondary" id="yt-sample-thumb-btn">🎨 Sample Thumbnail</button>
+            </div>
+          </div>
+          <div id="yt-hook-auditor" class="hook-auditor" style="display:none">
+            <span class="auditor-icon">⚠️</span>
+            <span id="yt-hook-msg"></span>
+          </div>
+        </div>
+        <div class="yt-previews">
+          <!-- Mobile Preview -->
+          <div class="yt-preview-block">
+            <h3 class="preview-label">📱 Mobile Feed</h3>
+            <div class="yt-mobile-card">
+              <div class="yt-thumbnail-wrap">
+                <div class="yt-thumbnail" id="yt-thumb-mobile">
+                  <canvas id="yt-thumb-canvas" width="320" height="180" style="display:none"></canvas>
+                  <div class="yt-thumb-placeholder">16:9 Thumbnail</div>
+                </div>
+                <span class="yt-duration-badge" id="yt-dur-badge-mobile">12:34</span>
+              </div>
+              <div class="yt-mobile-meta">
+                <div class="yt-avatar" id="yt-avatar-mobile"></div>
+                <div class="yt-meta-text">
+                  <div class="yt-title-display mobile-title" id="yt-mobile-title">Title here</div>
+                  <div class="yt-sub-meta"><span id="yt-channel-mobile">Channel</span> • <span id="yt-views-mobile">0 views</span> • <span id="yt-time-mobile">3 hours ago</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Desktop Sidebar Preview -->
+          <div class="yt-preview-block">
+            <h3 class="preview-label">🖥️ Desktop Sidebar</h3>
+            <div class="yt-desktop-card">
+              <div class="yt-desktop-thumb-wrap">
+                <div class="yt-desktop-thumb" id="yt-thumb-desktop">
+                  <div class="yt-thumb-placeholder">16:9</div>
+                </div>
+                <span class="yt-duration-badge small" id="yt-dur-badge-desktop">12:34</span>
+              </div>
+              <div class="yt-desktop-meta">
+                <div class="yt-title-display desktop-title" id="yt-desktop-title">Title here</div>
+                <div class="yt-sub-meta"><span id="yt-channel-desktop">Channel</span></div>
+                <div class="yt-sub-meta"><span id="yt-views-desktop">0 views</span> • <span id="yt-time-desktop">3 hours ago</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- PANEL 5: Sponsorship Rate Calculator                  -->
+    <!-- ===================================================== -->
+    <section class="tool-panel" id="panel-sponsor-rate">
+      <div class="panel-header">
+        <h2>Sponsorship Rate &amp; Pitch Generator</h2>
+        <p class="panel-desc">Calculate fair market rates and generate a professional outreach pitch.</p>
+      </div>
+      <div class="sponsor-layout">
+        <div class="sponsor-inputs glass-card">
+          <div class="form-row">
+            <div class="control-group">
+              <label>Your Name</label>
+              <input type="text" id="sr-creator-name" class="input-field" placeholder="Alex Creator" value="Alex Creator">
+            </div>
+            <div class="control-group">
+              <label>Channel / Handle</label>
+              <input type="text" id="sr-channel-name" class="input-field" placeholder="CreatorKit Studio" value="CreatorKit Studio">
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Target Brand Name</label>
+            <input type="text" id="sr-brand-name" class="input-field" placeholder="e.g. Notion, Raycast, Acme" value="Acme Studio">
+          </div>
+          <div class="control-group">
+            <label>Platform</label>
+            <select id="sr-platform" class="select-field">
+              <option value="yt-dedicated">YouTube Dedicated</option>
+              <option value="yt-integration">YouTube Integration</option>
+              <option value="ig-reel">Instagram Reel</option>
+              <option value="tiktok">TikTok</option>
+              <option value="newsletter">Newsletter Sponsor</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label>Average Views / Readership</label>
+            <input type="number" id="sr-views" class="input-field" value="25000" min="100">
+          </div>
+          <div class="control-group">
+            <label>Engagement Rate: <span id="sr-eng-val">3.5%</span></label>
+            <input type="range" id="sr-engagement" class="range-slider" min="10" max="150" value="35">
+          </div>
+          <div class="control-group">
+            <label>Niche / CPM Category</label>
+            <select id="sr-niche" class="select-field">
+              <option value="high">Finance / Tech / B2B ($25–$45 CPM)</option>
+              <option value="mid" selected>Lifestyle / Fitness / Beauty ($15–$25 CPM)</option>
+              <option value="volume">Gaming / Entertainment ($8–$15 CPM)</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label>Deliverable Add-ons</label>
+            <div class="checkbox-list">
+              <label class="checkbox-item"><input type="checkbox" id="addon-30day"> 30-Day Paid Digital Ad Usage (+30%)</label>
+              <label class="checkbox-item"><input type="checkbox" id="addon-60day"> 60-Day Paid Digital Ad Usage (+50%)</label>
+              <label class="checkbox-item"><input type="checkbox" id="addon-spark"> Spark Ads / Whitelisting (+35%)</label>
+              <label class="checkbox-item"><input type="checkbox" id="addon-bio"> Permanent Link in Bio 30 Days (+15%)</label>
+              <label class="checkbox-item"><input type="checkbox" id="addon-repost"> Re-post on Second Platform (+25%)</label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary" id="sr-calc-btn">💰 Calculate &amp; Generate Pitch</button>
+        </div>
+        <div class="sponsor-output-col">
+          <div id="sr-rate-cards" class="rate-cards-grid"></div>
+          <div id="sr-pitch-area" class="pitch-area glass-card" style="display:none">
+            <div class="pitch-header">
+              <h3>📧 Outreach Pitch Email</h3>
+              <div class="btn-row">
+                <button type="button" class="btn-secondary" id="sr-edit-pitch-btn">✏️ Edit Pitch</button>
+                <button type="button" class="btn-secondary" id="sr-copy-pitch-btn">📋 Copy Pitch</button>
+              </div>
+            </div>
+            <div id="sr-pitch-content" class="pitch-content"></div>
+            <textarea id="sr-pitch-textarea" class="script-textarea" style="display:none"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- PANEL 6: Link-in-Bio Exporter                        -->
+    <!-- ===================================================== -->
+    <section class="tool-panel" id="panel-link-bio">
+      <div class="panel-header">
+        <h2>Link-in-Bio Exporter</h2>
+        <p class="panel-desc">Build your self-hosted link page and export it as a single HTML file for GitHub Pages.</p>
+      </div>
+      <div class="bio-layout">
+        <!-- LEFT: EDITOR -->
+        <div class="bio-editor glass-card">
+          <div class="control-group">
+            <label>Profile Image</label>
+            <div class="avatar-row">
+              <div class="bio-avatar-preview" id="bio-avatar-preview">👤</div>
+              <input type="file" id="bio-avatar-upload" accept="image/*" hidden>
+              <button type="button" class="btn-secondary" onclick="document.getElementById('bio-avatar-upload').click()">Upload Photo</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Display Name</label>
+            <input type="text" id="bio-name" class="input-field" value="Alex Creator" placeholder="Your name">
+          </div>
+          <div class="control-group">
+            <label>Handle</label>
+            <input type="text" id="bio-handle" class="input-field" value="@alexcreator" placeholder="@username">
+          </div>
+          <div class="control-group">
+            <label>Bio</label>
+            <textarea id="bio-bio" class="input-field" rows="3" placeholder="Short bio...">Content creator · Tech reviewer · Sharing what I learn 🚀</textarea>
+          </div>
+          <div class="control-group">
+            <label>Theme</label>
+            <div class="theme-grid" id="bio-theme-grid">
+              <button type="button" class="theme-swatch active" data-theme="cyberpunk">🌐 Dark Cyberpunk</button>
+              <button type="button" class="theme-swatch" data-theme="slate">🧊 Clean Slate</button>
+              <button type="button" class="theme-swatch" data-theme="sunset">🌅 Sunset Warmth</button>
+              <button type="button" class="theme-swatch" data-theme="forest">🌿 Forest Modern</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Links</label>
+            <div id="bio-links-list"></div>
+            <button type="button" class="btn-secondary" id="bio-add-link-btn">+ Add New Link</button>
+          </div>
+          <div class="bio-export-section">
+            <button type="button" class="btn-primary" id="bio-export-btn">⬇️ Export Single-File index.html</button>
+            <div class="github-instructions glass-card">
+              <h4>🚀 Host Free on GitHub Pages in 60 seconds</h4>
+              <ol>
+                <li>Click Export above to download <code>index.html</code></li>
+                <li>Go to <strong>github.com/new</strong> and create a new public repo</li>
+                <li>Upload <code>index.html</code> to the repo root</li>
+                <li>Go to <strong>Settings → Pages → Source: main branch</strong></li>
+                <li>Your page is live at <code>https://username.github.io/repo-name</code></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <!-- RIGHT: LIVE PREVIEW -->
+        <div class="bio-preview-col">
+          <h3 class="preview-label">📱 Live Preview</h3>
+          <div class="phone-frame bio-phone">
+            <div class="phone-bezel">
+              <div class="phone-notch"></div>
+              <div class="phone-screen bio-screen" id="bio-preview-screen">
+                <!-- Live preview rendered by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /#app-main -->
+
+  <script src="app.js"></script>
+</body>
+</html>
